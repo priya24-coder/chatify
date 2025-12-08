@@ -1,4 +1,3 @@
-
 import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
@@ -33,24 +32,28 @@ export const signup = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-     if (newUser) {
-       // generateToken(newUser._id, res);
-       // await newUser.save();
+        // Create new user
+        const newUser = new User({
+            fullName,
+            email,
+            password: hashedPassword
+        });
 
-       const savedUser = await newUser.save();
-       generateToken(savedUser._id, res);
+        const savedUser = await newUser.save();
+
+        // Generate JWT token
+        generateToken(savedUser._id, res);
 
         res.status(201).json({
-            _id:newUser._id,
-            fullName:newUser.fullName,
-            email:newUser.email,
-            profilePic:newUser.profilePic,
+            _id: savedUser._id,
+            fullName: savedUser.fullName,
+            email: savedUser.email,
+            profilePic: savedUser.profilePic
         });
-     } else {
-        res.status(400).json({message: "Invalid user data"});
-     }
-} catch (error) {
-    console.log("Error in signup controller:", error);
-    res.status(500).json({message:"Internal server error"});
-}
+
+    } catch (error) {
+        console.error("Error in signup controller:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 };
+
