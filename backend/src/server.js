@@ -1,7 +1,9 @@
 //const express = require("express");
 
-import express from "express";
 import dotenv from "dotenv";
+
+
+import express from "express";
 import path from "path";
 
 import authRoutes from "./routes/auth.route.js";
