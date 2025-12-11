@@ -3,6 +3,7 @@ import { sendWelcomeEmail } from "../emails/emailHandlers.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { ENV } from "../lib/env.js";
+import cloudinary from "../lib/cloudinary.js";
 
 
 export const signup = async (req, res) => {
@@ -72,20 +73,20 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // 1️⃣ Check if user exists
+    // 1️ Check if user exists
     const user = await User.findOne({ email });
     if (!user)
       return res.status(400).json({ message: "Invalid Credentials" });
 
-    // 2️⃣ Check password
+    // 2️ Check password
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Invalid Credentials" });
 
-    // 3️⃣ Generate JWT token
+    // 3️ Generate JWT token
     generateToken(user._id, res);
 
-    // 4️⃣ Return logged-in user data
+    // 4 Return logged-in user data
     res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
@@ -103,3 +104,26 @@ export const logout = (_, res) => {
  res.cookie("jwt","",{ maxAge:0 });
  res.status(200).json({message: "Logged out successfully" });
 };
+
+export const updateProfile = async (req, res) => {
+try {
+  const { profilePic } = req.body;
+  if(!profilePic) return res.status(400).json({messgae: "Profile pic is required"});
+
+  const userId = req.user._id;
+
+  const uploadResponse = await cloundinary.uploader.ulpod(ProfilePic);
+
+  const updateUser = await User.findByIdAndUpdate(
+    userId, 
+    {profilePic: uploadResponse.secure_url}, 
+    {new:true}
+  );
+
+  res.status(200).json(updateUser);
+} catch (error) {
+  console.log("Error in update profile", error);
+  res.status(500).json({message: "Internal server error" });
+}
+};
+
