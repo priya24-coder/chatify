@@ -1,6 +1,8 @@
 
+import { useAuthStore } from "../store/useAuthStore";
+
 function LoginPage() {
-  const { autUser, isLoading, login } = useAuthStore();
+  const { authUser, isLoading, login } = useAuthStore();
   return <div>LoginPage</div>;
 }
 
