@@ -108,11 +108,13 @@ export const logout = (_, res) => {
 export const updateProfile = async (req, res) => {
 try {
   const { profilePic } = req.body;
-  if(!profilePic) return res.status(400).json({messgae: "Profile pic is required"});
+  if(!profilePic) return res.status(400).json({ message: "Profile pic is required" });
+
 
   const userId = req.user._id;
 
-  const uploadResponse = await cloundinary.uploader.ulpod(ProfilePic);
+  const uploadResponse = await cloudinary.uploader.upload(profilePic);
+
 
   const updateUser = await User.findByIdAndUpdate(
     userId, 
