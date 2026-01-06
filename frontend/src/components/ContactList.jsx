@@ -18,8 +18,8 @@ function ContactList() {
  return ( 
   <>
   {allContacts.map((contact) => (
-    <div
-    key={contact.id}
+  <div
+    key={contact._id}
     className="bg-cyan-500/10 p-4 rounded-lg cursor-pointer hover:bg-cyan-500/20 transition-colors"
     onClick={() => setSelectedUser(contact)}
     >
