@@ -1,7 +1,7 @@
 //const express = require("express");
 
 import dotenv from "dotenv";
-dotenv.config(); // ✅ REQUIRED
+
 
 import express from "express";
 import cookieParser from "cookie-parser";
