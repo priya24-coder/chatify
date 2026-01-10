@@ -1,10 +1,13 @@
 {
-  "name": "chatify-backend",
+  "name": "streamify",
   "version": "1.0.0",
-  "type": "module",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
   },
-  "keywords": []
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

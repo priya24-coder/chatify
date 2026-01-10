@@ -7,3 +7,4 @@ export const axiosInstance = axios.create({
       : "/api",
   withCredentials: true, // allows cookies (JWT)
 });
+

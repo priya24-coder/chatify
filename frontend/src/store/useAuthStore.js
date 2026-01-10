@@ -18,17 +18,26 @@ export const useAuthStore = create((set, get) => ({
 
   // ✅ CHECK AUTH
   checkAuth: async () => {
-    try {
-      const res = await axiosInstance.get("/auth/check");
-      set({ authUser: res.data });
-      get().connectSocket();
-    } catch (error) {
-      console.log("Error in authCheck:", error);
+  try {
+    const res = await axiosInstance.get("/auth/check", {
+      withCredentials: true,
+    });
+
+    set({ authUser: res.data });
+    get().connectSocket();
+
+  } catch (error) {
+    // 401 = not logged in → normal case
+    if (error.response?.status === 401) {
       set({ authUser: null });
-    } finally {
-      set({ isCheckingAuth: false });
+    } else {
+      console.error("Auth check failed:", error);
     }
-  },
+
+  } finally {
+    set({ isCheckingAuth: false });
+  }
+},
 
   // ✅ SIGNUP
   signup: async ({ fullName, email, password }) => {
